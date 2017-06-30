@@ -38,5 +38,6 @@ buildNumber.properties
 
 #---------------------------------eclipse-----------------------------
 
-.setting/
+.settings/
 .project
+.classpath
