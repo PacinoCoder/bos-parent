@@ -89,7 +89,7 @@
 		checkbox : true,
 	}, {
 		field : 'showid',
-		title : '分拣编号',
+		title : '分区编号',
 		width : 120,
 		align : 'center',
 		formatter : function(data,row ,index){
@@ -208,23 +208,30 @@
 			<div class="datagrid-toolbar">
 				<a id="save" icon="icon-save" href="#" class="easyui-linkbutton" plain="true" >保存</a>
 			</div>
+			<script type="text/javascript">
+				$(function(){
+					$("#save").click(function(){
+						var flag = $("#addSubareaForm").form("validate");
+						if (flag) {
+							$("#addSubareaForm").submit();
+						}
+					});
+					
+				})
+			</script>
 		</div>
 		
 		<div style="overflow:auto;padding:5px;" border="false">
-			<form>
+			<form id="addSubareaForm" method="post" action="subareaAction_save.action">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">分区信息</td>
 					</tr>
 					<tr>
-						<td>分拣编码</td>
-						<td><input type="text" name="id" class="easyui-validatebox" required="true"/></td>
-					</tr>
-					<tr>
 						<td>选择区域</td>
 						<td>
-							<input class="easyui-combobox" name="region.id"  
-    							data-options="valueField:'id',textField:'name',url:'json/standard.json'" />  
+							<input class="easyui-combobox" name="region.id"
+    							data-options="valueField:'id',textField:'name',url:'regionAction_listajax.action',mode:'remote'" />
 						</td>
 					</tr>
 					<tr>

@@ -21,22 +21,6 @@ public class StaffAction extends BaseAction<Staff> {
 	@Autowired
 	private IStaffService staffService;
 	
-	// 属性驱动获得分页参数
-	private Integer page;
-	private Integer rows;
-	public Integer getRows() {
-		return rows;
-	}
-	public void setRows(Integer rows) {
-		this.rows = rows;
-	}
-	public Integer getPage() {
-		return page;
-	}
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-	
 	// 属性驱动获取批量删除的ids
 	private String ids;
 	public String getIds() {
@@ -67,24 +51,8 @@ public class StaffAction extends BaseAction<Staff> {
 	 * @return
 	 */
 	public String pageQuery(){
-		PageBean pageBean = new PageBean();
-		pageBean.setCurrentPage(page);
-		pageBean.setPageSize(rows);
-		//创建离线查询对象
-		DetachedCriteria detachedCriteria = DetachedCriteria.forClass(Staff.class);
-		pageBean.setDetachedCriteria(detachedCriteria);
-		//传递至业务层处理
 		staffService.pageQuery(pageBean);
-		/*
-		 * 把pageBean转化为json
-		 * 	1.创建jsonlib的配置对象,用于指定哪些属性不用转化为json
-		 * 	2.把对象转为json,用配置对象作为第二个参数
-		 * 	3.把json写到浏览器
-		 */
-		JsonConfig jsonConfig = new JsonConfig();
-		jsonConfig.setExcludes(new String[]{"currentPage","pageSize","detachedCriteria"});
-		String json = JSONObject.fromObject(pageBean, jsonConfig).toString();
-		BOSUtils.printJson(json);
+		Bean2Json(pageBean, new String[]{"currentPage","pageSize","detachedCriteria"});
 		return NONE;
 	}
 	/**

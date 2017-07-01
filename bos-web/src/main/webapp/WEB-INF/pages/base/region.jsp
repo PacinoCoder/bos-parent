@@ -26,6 +26,9 @@
 <script
 	src="${pageContext.request.contextPath }/js/easyui/locale/easyui-lang-zh_CN.js"
 	type="text/javascript"></script>
+<!-- 导入一键上传插件 -->
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/js/jquery.ocupload-1.1.2.js"></script>
 <script type="text/javascript">
 	function doAdd(){
 		$('#addRegionWindow').window("open");
@@ -110,10 +113,16 @@
 			pageList: [30,50,100],
 			pagination : true,
 			toolbar : toolbar,
-			url : "json/region.json",
+			url : "regionAction_pageQuery.action",
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow
+		});
+		
+		//表格加载完成后,点击导入选择excel文件
+		$("#button-import").upload({
+			action:'regionAction_importRegion.action',
+			name:'regionFile'
 		});
 		
 		// 添加、修改区域窗口
@@ -126,6 +135,9 @@
 	        height: 400,
 	        resizable:false
 	    });
+		
+		
+		
 		
 	});
 

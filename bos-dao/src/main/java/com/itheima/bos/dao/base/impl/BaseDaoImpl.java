@@ -34,9 +34,13 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 	public void setMySessionFactory(SessionFactory sessionFactory){
 		super.setSessionFactory(sessionFactory);
 	}
-	
+//=========================================方法区==========================>>>>>>>>>>
 	public void save(T entity) {
 		this.getHibernateTemplate().save(entity);
+	}
+	
+	public void saveOrUpdate(T entity) {
+		this.getHibernateTemplate().saveOrUpdate(entity);
 	}
 
 	public void delete(T entity) {
@@ -51,8 +55,8 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		return this.getHibernateTemplate().get(entityClass, id);
 	}
 	
-	public List<T> getALl() {
-		String hql = "FORM "+entityClass.getSimpleName();
+	public List<T> findAll() {
+		String hql = "FROM "+entityClass.getSimpleName();
 		return (List<T>) this.getHibernateTemplate().find(hql);
 	}
 
@@ -86,6 +90,9 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		List rows = this.getHibernateTemplate().findByCriteria(detachedCriteria, firstResult, maxResults);
 		pageBean.setRows(rows);
 	}
+
+	
+	
 
 	
 

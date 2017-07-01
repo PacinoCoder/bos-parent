@@ -18,6 +18,10 @@ public interface IBaseDao<T> {
 	 */
 	void save(T entity);
 	/**
+	 * 保存或修改
+	 */
+	void saveOrUpdate(T entity);
+	/**
 	 * 删除
 	 * @param entity
 	 */
@@ -37,7 +41,7 @@ public interface IBaseDao<T> {
 	 * 查询所有
 	 * @return
 	 */
-	List<T> getALl();
+	List<T> findAll();
 	/**
 	 * 执行查询
 	 * @param queryName:从映射配置文件中获取
