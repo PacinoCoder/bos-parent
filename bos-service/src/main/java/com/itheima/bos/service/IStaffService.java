@@ -1,5 +1,7 @@
 package com.itheima.bos.service;
 
+import java.util.List;
+
 import com.itheima.bos.domain.Staff;
 import com.itheima.bos.utils.PageBean;
 
@@ -24,5 +26,10 @@ public interface IStaffService {
 	 * @param model
 	 */
 	void update(Staff model);
+	/**
+	 * 查询没有删除的取派员
+	 * @return
+	 */
+	List<Staff> findStaffNotDelete();
 
 }

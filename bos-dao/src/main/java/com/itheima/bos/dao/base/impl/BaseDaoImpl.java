@@ -35,31 +35,53 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		super.setSessionFactory(sessionFactory);
 	}
 //=========================================方法区==========================>>>>>>>>>>
+	/**
+	 * 保存添加
+	 */
 	public void save(T entity) {
 		this.getHibernateTemplate().save(entity);
 	}
-	
+	/**
+	 * 保存或修改
+	 */
 	public void saveOrUpdate(T entity) {
 		this.getHibernateTemplate().saveOrUpdate(entity);
 	}
-
+	/**
+	 * 删除
+	 */
 	public void delete(T entity) {
 		this.getHibernateTemplate().delete(entity);
 	}
-
+	/**
+	 * 修改
+	 */
 	public void update(T entity) {
 		this.getHibernateTemplate().update(entity);
 	}
-	
+	/**
+	 * 根据id查询
+	 */
 	public T getById(Serializable id) {
 		return this.getHibernateTemplate().get(entityClass, id);
 	}
-	
+	/**
+	 * 查询所有
+	 */
 	public List<T> findAll() {
 		String hql = "FROM "+entityClass.getSimpleName();
 		return (List<T>) this.getHibernateTemplate().find(hql);
 	}
-
+	
+	/**
+	 * 按条件查询
+	 */
+	public List<T> findByCriteria(DetachedCriteria criteria) {
+		return (List<T>) this.getHibernateTemplate().findByCriteria(criteria);
+	}
+	/**
+	 * 按条件进行修改
+	 */
 	public void executeUpdate(String queryName, Object... objects) {
 		// 获取与当前线程绑定的session
 		Session session = this.getSessionFactory().getCurrentSession();
@@ -71,7 +93,9 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		}
 		query.executeUpdate();
 	}
-
+	/**
+	 * 分页查询
+	 */
 	public void pageQuery(PageBean pageBean) {
 		//pageBean共有5个属性,其中3个属性在web层已经完成赋值,分别是:
 		Integer currentPage = pageBean.getCurrentPage();
@@ -85,11 +109,15 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements IBaseDao<T> {
 		
 		//为rows赋值
 		detachedCriteria.setProjection(null);
+		//指定Hibernate封装对象的方式---对象中有属性是对象的,不能封装成对象数组,而应该把属性对象封装到对象里面.
+		detachedCriteria.setResultTransformer(DetachedCriteria.ROOT_ENTITY);
 		int firstResult = (currentPage - 1) * pageSize;
 		int maxResults = pageSize;
 		List rows = this.getHibernateTemplate().findByCriteria(detachedCriteria, firstResult, maxResults);
 		pageBean.setRows(rows);
 	}
+
+	
 
 	
 	

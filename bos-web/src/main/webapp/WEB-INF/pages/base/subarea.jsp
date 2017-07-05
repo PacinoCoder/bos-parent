@@ -44,11 +44,12 @@
 	}
 	
 	function doExport(){
-		alert("导出");
+		//因为需要页面刷新来弹出下载对话框,所以不能发送ajax
+		window.location.href="subareaAction_exportSubarea.action";
 	}
 	
 	function doImport(){
-		alert("导入");
+		alert("导出数据");
 	}
 	
 	//工具栏
@@ -146,6 +147,25 @@
 		align : 'center'
 	} ] ];
 	
+	//提供一个工具方法,把表单输入项全部转为json对象
+	$.fn.serializeJson=function(){  
+	    var serializeObj={};  
+	    var array=this.serializeArray();
+	    $(array).each(function(){  
+	        if(serializeObj[this.name]){  
+	            if($.isArray(serializeObj[this.name])){  
+	                serializeObj[this.name].push(this.value);  
+	            }else{  
+	                serializeObj[this.name]=[serializeObj[this.name],this.value];  
+	            }  
+	        }else{  
+	            serializeObj[this.name]=this.value;   
+	        }  
+	    });  
+	    return serializeObj;  
+    };
+
+	
 	$(function(){
 		// 先将body隐藏，再显示，不会出现页面刷新效果
 		$("body").css({visibility:"visible"});
@@ -160,7 +180,7 @@
 			pageList: [30,50,100],
 			pagination : true,
 			toolbar : toolbar,
-			url : "json/subarea.json",
+			url : 'subareaAction_pageQuery.action',
 			idField : 'id',
 			columns : columns,
 			onDblClickRow : doDblClickRow
@@ -188,7 +208,12 @@
 	        resizable:false
 	    });
 		$("#btn").click(function(){
-			alert("执行查询...");
+			//调用方法,把表单输入项转化为json
+			var json = $("#searchForm").serializeJson();
+			//让表单重新发送ajax
+			$("#grid").datagrid("load",json);
+			//关闭查询窗口
+			$("#searchWindow").window("close");
 		});
 		
 	});
@@ -267,7 +292,7 @@
 	<!-- 查询分区 -->
 	<div class="easyui-window" title="查询分区窗口" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 		<div style="overflow:auto;padding:5px;" border="false">
-			<form>
+			<form id="searchForm">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
 						<td colspan="2">查询条件</td>

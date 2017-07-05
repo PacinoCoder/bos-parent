@@ -1,19 +1,14 @@
 package com.itheima.bos.web.action;
 
-import org.hibernate.criterion.DetachedCriteria;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.itheima.bos.domain.Staff;
 import com.itheima.bos.service.IStaffService;
-import com.itheima.bos.service.impl.StaffServiceImpl;
-import com.itheima.bos.utils.BOSUtils;
-import com.itheima.bos.utils.PageBean;
 import com.itheima.bos.web.action.base.BaseAction;
-
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
 @SuppressWarnings("all")
 @Controller
 @Scope("prototype")
@@ -61,5 +56,15 @@ public class StaffAction extends BaseAction<Staff> {
 	public String deleteBatch(){
 		staffService.deleteBatch(ids);
 		return LIST;
+	}
+	/**
+	 * 查询所有未删除的取派员
+	 */
+	public String listajax(){
+		//得到数据集合
+		List<Staff> list = staffService.findStaffNotDelete();
+		//转化为json
+		this.List2Json(list, new String[]{"decidedzones"});
+		return NONE;
 	}
 }

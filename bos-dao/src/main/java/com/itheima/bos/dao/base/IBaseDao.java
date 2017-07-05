@@ -3,6 +3,8 @@ package com.itheima.bos.dao.base;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.criterion.DetachedCriteria;
+
 import com.itheima.bos.utils.PageBean;
 
 /**
@@ -38,12 +40,18 @@ public interface IBaseDao<T> {
 	 */
 	T getById(Serializable id);
 	/**
+	 * 按条件查询
+	 * @param criteria
+	 * @return
+	 */
+	List<T> findByCriteria(DetachedCriteria criteria);
+	/**
 	 * 查询所有
 	 * @return
 	 */
 	List<T> findAll();
 	/**
-	 * 执行查询
+	 * 执行修改
 	 * @param queryName:从映射配置文件中获取
 	 * @param objects:可变参数,用于给?赋值
 	 */

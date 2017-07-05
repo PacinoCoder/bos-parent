@@ -1,5 +1,9 @@
 package com.itheima.bos.service.impl;
 
+import java.util.List;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +37,7 @@ public class StaffServiceImpl implements IStaffService {
 		staffDao.pageQuery(pageBean);
 	}
 	/**
-	 * 批量删除
+	 * 批量逻辑删除:实际是修改deltag为1
 	 */
 	public void deleteBatch(String ids) {
 		String[] idArray = ids.split(",");
@@ -47,7 +51,14 @@ public class StaffServiceImpl implements IStaffService {
 	 */
 	public void update(Staff model) {
 		staffDao.update(model);
-		
+	}
+	/**
+	 * 查询所有没有被删除的取派员
+	 */
+	public List<Staff> findStaffNotDelete() {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Staff.class);
+		criteria.add(Restrictions.eq("deltag", "0"));
+		return staffDao.findByCriteria(criteria);
 	}
 
 }
